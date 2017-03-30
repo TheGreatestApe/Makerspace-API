@@ -26,7 +26,7 @@ class User(db.Model):
 def index():
 	return "Homepage"
 
-@app.route("/Users", methods=["POST"])
+@app.route("/Users", methods=["GET","POST"])
 def users():
 	user = User(request.form["username"], request.form["email"])
 	db.session.add(user)
