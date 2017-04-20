@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:kb052591@localhost/StauntonMakerSpace"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:@localhost/StauntonMakerSpace"
 app.debug = True
 db = SQLAlchemy(app)
 
