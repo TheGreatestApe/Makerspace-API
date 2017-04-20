@@ -1,3 +1,4 @@
+
 from flask import Flask, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
@@ -19,6 +20,14 @@ class User(db.Model):
         self.bios = bios
         self.phone = phone
 
+    def serialize(self):
+        return{'id' : self.id,
+        'username' : self.username,
+        'email' : self.email,
+        'bios' : self.bios
+
+        }
+
     def __repr__(self):
         return "<User %r>" % self.username
 
@@ -26,15 +35,40 @@ class User(db.Model):
 def index():
 	return "Homepage"
 
-@app.route("/Users", methods=["GET","POST"])
-def users():
+@app.route("/User", methods=["GET"])
+def get_all_users():
+    members = []
+    for x in User.query.all():
+        members.append(x.serialize())   
+    return jsonify({'member' : members})
+
+@app.route("/User", methods=["POST"])
+def create_user():
 	user = User(request.form["username"], request.form["email"])
 	db.session.add(user)
 	db.session.commit()
 	return redirect(url_for("index"))
 
-@app.route("/Users/<username>", methods=["GET","POST","PUT","DELETE"])
-def profile():
-	return "hello"
+@app.route("/User/<id>", methods=["GET"])
+def get_user(id):
+    user = db.session.query(User).filter_by(id = id).first()
+    return jsonify({'user' : user.serialize()})
+
+@app.route("/User/<username>", methods=["POST"])
+def create_profile():
+    bios = profile(request.form["profile"])
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for("index"))
+
+@app.route("/User/<username>", methods=["PUT"])
+def update_profile():
+    return "hello"
+
+@app.route("/User/<username>", methods=["DELETE"])
+def delete_profile():
+    return "hello"
+
 if __name__ == "__main__":
     app.run()
+
